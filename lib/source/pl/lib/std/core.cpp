@@ -106,7 +106,7 @@ namespace pl::lib::libstd::core {
                 auto index = ctx->getCurrentArrayIndex();
 
                 if (index.has_value())
-                    return u128(*index);
+                    return u64(*index);
                 else
                     return 0;
             });
@@ -116,9 +116,9 @@ namespace pl::lib::libstd::core {
                 auto pattern = params[0].toPattern();
 
                 if (auto iterable = dynamic_cast<ptrn::IIterable*>(pattern.get()); iterable != nullptr)
-                    return u128(iterable->getEntryCount());
+                    return u64(iterable->getEntryCount());
                 else
-                    return u128(0);
+                    return u64(0);
             });
 
             /* has_member(pattern, name) -> member_exists */

@@ -81,7 +81,7 @@ namespace pl::lib::libstd::libstd {
 
             /* pack_size(...) */
             runtime.addFunction(nsStd, "sizeof_pack", FunctionParameterCount::atLeast(0), [](Evaluator *, auto params) -> std::optional<Token::Literal> {
-                return u128(params.size());
+                return u64(params.size());
             });
 
             /* error(message) */

@@ -26,21 +26,21 @@ namespace pl::ptrn {
 
         [[nodiscard]] virtual u64 getBitSize() const = 0;
 
-        [[nodiscard]] u128 getTotalBitOffset(u64 fromByteOffset = 0) const {
+        [[nodiscard]] u64 getTotalBitOffset(u64 fromByteOffset = 0) const {
             return ((this->getOffset() - fromByteOffset) << 3) + this->getBitOffset();
         }
 
-        [[nodiscard]] u128 getBitOffsetForDisplay() const {
+        [[nodiscard]] u64 getBitOffsetForDisplay() const {
             return this->getTotalBitOffset() - getTopmostBitfield().getTotalBitOffset();
         }
 
         [[nodiscard]] virtual bool isPadding() const { return false; }
 
-        [[nodiscard]] u128 getOffsetForSorting() const override {
+        [[nodiscard]] u64 getOffsetForSorting() const override {
             return this->getTotalBitOffset();
         }
 
-        [[nodiscard]] u128 getSizeForSorting() const override {
+        [[nodiscard]] u64 getSizeForSorting() const override {
             return this->getBitSize();
         }
 
@@ -65,7 +65,7 @@ namespace pl::ptrn {
             return std::unique_ptr<Pattern>(new PatternBitfieldField(*this));
         }
 
-        [[nodiscard]] u128 readValue() const {
+        [[nodiscard]] u64 readValue() const {
             return this->getEvaluator()->readBits(this->getOffset(), this->getBitOffset(), this->getBitSize(), this->getSection(), this->getEndian());
         }
 
@@ -144,8 +144,8 @@ namespace pl::ptrn {
                 }
             }
 
-            if (!result.empty() && result.size() <= sizeof(u128)) {
-                u128 writeValue = 0;
+            if (!result.empty() && result.size() <= sizeof(u64)) {
+                u64 writeValue = 0;
                 std::memcpy(&writeValue, result.data(), result.size());
 
                 this->getEvaluator()->writeBits(this->getOffset(), this->getBitOffset(), this->getBitSize(), this->getSection(), this->getEndian(), writeValue);
@@ -269,7 +269,7 @@ namespace pl::ptrn {
                                  public IInlinable,
                                  public IIndexable {
     public:
-        PatternBitfieldArray(core::Evaluator *evaluator, u64 offset, u8 firstBitOffset, u128 totalBitSize, u32 line)
+        PatternBitfieldArray(core::Evaluator *evaluator, u64 offset, u8 firstBitOffset, u64 totalBitSize, u32 line)
                 : PatternBitfieldMember(evaluator, offset, (totalBitSize + 7) / 8, line), m_firstBitOffset(firstBitOffset), m_totalBitSize(totalBitSize) { }
 
         PatternBitfieldArray(const PatternBitfieldArray &other) : PatternBitfieldMember(other) {
@@ -303,7 +303,7 @@ namespace pl::ptrn {
             this->m_firstBitOffset = bitOffset;
         }
 
-        void setBitSize(u128 bitSize) {
+        void setBitSize(u64 bitSize) {
             this->m_totalBitSize = bitSize;
             this->setSize((bitSize + 7) / 8);
         }
@@ -544,7 +544,7 @@ namespace pl::ptrn {
         std::vector<std::shared_ptr<Pattern>> m_entries;
         std::vector<Pattern *> m_sortedEntries;
         u8 m_firstBitOffset = 0;
-        u128 m_totalBitSize = 0;
+        u64 m_totalBitSize = 0;
         PatternBitfieldMember *m_parentBitfield = nullptr;
         bool m_reversed = false;
     };
@@ -553,7 +553,7 @@ namespace pl::ptrn {
                             public IInlinable,
                             public IIterable {
     public:
-        PatternBitfield(core::Evaluator *evaluator, u64 offset, u8 firstBitOffset, u128 totalBitSize, u32 line)
+        PatternBitfield(core::Evaluator *evaluator, u64 offset, u8 firstBitOffset, u64 totalBitSize, u32 line)
                 : PatternBitfieldMember(evaluator, offset, (totalBitSize + 7) / 8, line), m_firstBitOffset(firstBitOffset), m_totalBitSize(totalBitSize) { }
 
         PatternBitfield(const PatternBitfield &other) : PatternBitfieldMember(other) {
@@ -585,7 +585,7 @@ namespace pl::ptrn {
             this->m_firstBitOffset = bitOffset;
         }
 
-        void setBitSize(u128 bitSize) {
+        void setBitSize(u64 bitSize) {
             this->m_totalBitSize = bitSize;
             this->setSize((bitSize + 7) / 8);
         }

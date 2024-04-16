@@ -34,7 +34,7 @@ namespace pl::core::ast {
         }
 
     private:
-        u128 evaluatePlacementOffset(Evaluator *evaluator) const;
+        u64 evaluatePlacementOffset(Evaluator *evaluator) const;
         u64 evaluatePlacementSection(Evaluator *evaluator) const;
 
     private:

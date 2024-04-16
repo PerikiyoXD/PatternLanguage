@@ -58,7 +58,7 @@ namespace pl::core::ast {
         FLOAT_BIT_OPERATION(bitNot) {
             wolv::util::unused(left);
 
-            return ~static_cast<u128>(right);
+            return ~static_cast<u64>(right);
         }
 
         FLOAT_BIT_OPERATION(modulus) {

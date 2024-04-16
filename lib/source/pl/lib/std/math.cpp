@@ -172,20 +172,20 @@ namespace pl::lib::libstd::math {
                     endian = static_cast<types::Endian>(params[5].toUnsigned());
 
                 if (size > 16)
-                    err::E0003.throwError("Size cannot be bigger than sizeof(u128)", {});
+                    err::E0003.throwError("Size cannot be bigger than sizeof(u64)", {});
  
-                u128 result = 0;
-                u128 endAddr = end / size;
+                u64 result = 0;
+                u64 endAddr = end / size;
 
                 auto reader = hlp::MemoryReader(ctx, section);
                 reader.seek(start);
                 reader.setEndAddress(end);
 
-                for (u128 addr = start; addr < endAddr; ++addr) {
+                for (u64 addr = start; addr < endAddr; ++addr) {
                     auto bytes = reader.read(addr, size);
 
-                    // Copy bytes to u128
-                    u128 value = 0;
+                    // Copy bytes to u64
+                    u64 value = 0;
                     std::memcpy(&value, bytes.data(), size);
 
                     // Swap endianess

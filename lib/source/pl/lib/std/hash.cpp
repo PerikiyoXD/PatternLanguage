@@ -29,7 +29,7 @@ namespace pl::lib::libstd::hash {
                 wolv::hash::Crc<32> crc(poly, init, xorout, reflectIn, reflectOut);
                 crc.process(pattern->getBytes());
 
-                return u128(crc.getResult());
+                return u64(crc.getResult());
             });
         }
     }

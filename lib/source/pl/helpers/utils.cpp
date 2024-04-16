@@ -6,7 +6,7 @@
 
 namespace pl::hlp {
 
-    std::string to_string(u128 value) {
+    std::string to_string(u64 value) {
         return fmt::format("{}", value);
     }
 

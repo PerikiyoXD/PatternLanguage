@@ -105,8 +105,8 @@ namespace pl::core {
         return offset;
     }
 
-    [[nodiscard]] u128 Evaluator::readBits(u128 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness) {
-        u128 value = 0;
+    [[nodiscard]] u64 Evaluator::readBits(u64 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness) {
+        u64 value = 0;
 
         size_t readSize = (bitOffset + bitSize + 7) / 8;
         readSize = std::min(readSize, sizeof(value));
@@ -119,7 +119,7 @@ namespace pl::core {
         return value;
     }
 
-    void Evaluator::writeBits(u128 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness, u128 value) {
+    void Evaluator::writeBits(u64 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness, u64 value) {
         size_t writeSize = (bitOffset + bitSize + 7) / 8;
         writeSize = std::min(writeSize, sizeof(value));
         value = hlp::changeEndianess(value, writeSize, endianness);
@@ -128,7 +128,7 @@ namespace pl::core {
         auto mask = hlp::bitmask(bitSize);
         value = (value & mask) << offset;
 
-        u128 oldValue = 0;
+        u64 oldValue = 0;
         this->readData(byteOffset, &oldValue, writeSize, section);
         oldValue = hlp::changeEndianess(oldValue, sizeof(oldValue), endianness);
 
@@ -299,8 +299,8 @@ namespace pl::core {
             // Handle auto variables
             if (!value.has_value())
                 pattern = std::make_shared<ptrn::PatternPadding>(this, 0, 0, 0);
-            else if (std::get_if<u128>(&value.value()) != nullptr)
-                pattern = std::make_shared<ptrn::PatternUnsigned>(this, 0, sizeof(u128), 0);
+            else if (std::get_if<u64>(&value.value()) != nullptr)
+                pattern = std::make_shared<ptrn::PatternUnsigned>(this, 0, sizeof(u64), 0);
             else if (std::get_if<i128>(&value.value()) != nullptr)
                 pattern = std::make_shared<ptrn::PatternSigned>(this, 0, sizeof(i128), 0);
             else if (std::get_if<double>(&value.value()) != nullptr)
@@ -381,7 +381,7 @@ namespace pl::core {
         return std::visit(wolv::util::overloaded {
             [&](auto &value) -> Token::Literal {
                if (dynamic_cast<const ptrn::PatternUnsigned*>(pattern) || dynamic_cast<const ptrn::PatternEnum*>(pattern))
-                   return truncateValue<u128>(pattern->getSize(), u128(value));
+                   return truncateValue<u64>(pattern->getSize(), u64(value));
                else if (dynamic_cast<const ptrn::PatternSigned*>(pattern))
                    return truncateValue<i128>(pattern->getSize(), i128(value));
                else if (dynamic_cast<const ptrn::PatternFloat*>(pattern)) {
@@ -390,9 +390,9 @@ namespace pl::core {
                    else
                        return double(value);
                } else if (dynamic_cast<const ptrn::PatternBoolean*>(pattern))
-                   return value == 0 ? u128(0) : u128(1);
+                   return value == 0 ? u64(0) : u64(1);
                else if (dynamic_cast<const ptrn::PatternCharacter*>(pattern) || dynamic_cast<const ptrn::PatternWideCharacter*>(pattern))
-                   return truncateValue(pattern->getSize(), u128(value));
+                   return truncateValue(pattern->getSize(), u64(value));
                else if (dynamic_cast<const ptrn::PatternString*>(pattern))
                    return Token::Literal(value).toString(false);
                else if (dynamic_cast<const ptrn::PatternPadding*>(pattern))
@@ -403,7 +403,7 @@ namespace pl::core {
             [&](const std::string &value) -> Token::Literal {
                 if (dynamic_cast<const ptrn::PatternUnsigned*>(pattern) != nullptr) {
                     if (value.size() <= pattern->getSize()) {
-                        u128 result = 0;
+                        u64 result = 0;
                         std::memcpy(&result, value.data(), value.size());
                         return result;
                     } else {
@@ -617,7 +617,7 @@ namespace pl::core {
             };
 
             std::visit(wolv::util::overloaded {
-                [&](const u128 &value) {
+                [&](const u64 &value) {
                     changePatternType(pattern, std::make_shared<ptrn::PatternUnsigned>(this, 0, 16, 0));
 
                     auto adjustedValue = hlp::changeEndianess(value, pattern->getSize(), pattern->getEndian());

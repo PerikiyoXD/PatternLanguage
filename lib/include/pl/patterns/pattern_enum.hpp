@@ -23,7 +23,7 @@ namespace pl::ptrn {
         }
 
         [[nodiscard]] core::Token::Literal getValue() const override {
-            u128 value = 0;
+            u64 value = 0;
             this->getEvaluator()->readData(this->getOffset(), &value, this->getSize(), this->getSection());
 
             return transformValue(hlp::changeEndianess(value, this->getSize(), this->getEndian()));
@@ -71,7 +71,7 @@ namespace pl::ptrn {
             return fmt::format("{} (0x{:0{}X})", this->toString(), value, this->getSize() * 2);
         }
 
-        static std::string getEnumName(const std::string &typeName, u128 value, const std::vector<EnumValue> &enumValues) {
+        static std::string getEnumName(const std::string &typeName, u64 value, const std::vector<EnumValue> &enumValues) {
             std::string result = typeName + "::";
 
             bool foundValue = false;
@@ -89,7 +89,7 @@ namespace pl::ptrn {
         }
 
         [[nodiscard]] std::string toString() const override {
-            u128 value = this->getValue().toUnsigned();
+            u64 value = this->getValue().toUnsigned();
             return Pattern::formatDisplayValue(getEnumName(this->getTypeName(), value, this->m_enumValues), this->clone(), true);
         }
 

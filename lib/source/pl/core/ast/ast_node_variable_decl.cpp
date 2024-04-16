@@ -94,7 +94,7 @@ namespace pl::core::ast {
         }
     }
 
-    u128 ASTNodeVariableDecl::evaluatePlacementOffset(Evaluator *evaluator) const {
+    u64 ASTNodeVariableDecl::evaluatePlacementOffset(Evaluator *evaluator) const {
         const auto placementNode = this->m_placementOffset->evaluate(evaluator);
         const auto offsetLiteral = dynamic_cast<ASTNodeLiteral *>(placementNode.get());
         if (offsetLiteral == nullptr)

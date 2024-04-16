@@ -14,7 +14,7 @@ namespace pl::ptrn {
         }
 
         [[nodiscard]] core::Token::Literal getValue() const override {
-            u128 data = 0;
+            u64 data = 0;
             this->getEvaluator()->readData(this->getOffset(), &data, this->getSize(), this->getSection());
             return transformValue(hlp::changeEndianess(data, this->getSize(), this->getEndian()));
         }

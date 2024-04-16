@@ -12,7 +12,7 @@
 
 namespace pl::lib::libstd::mem {
 
-    static std::optional<u128> findSequence(::pl::core::Evaluator *ctx, u64 occurrenceIndex, u64 offsetFrom, u64 offsetTo, const std::vector<u8> &sequence) {
+    static std::optional<u64> findSequence(::pl::core::Evaluator *ctx, u64 occurrenceIndex, u64 offsetFrom, u64 offsetTo, const std::vector<u8> &sequence) {
         std::vector<u8> bytes(sequence.size(), 0x00);
         u32 occurrences      = 0;
         const u64 bufferSize = ctx->getDataSize();
@@ -26,7 +26,7 @@ namespace pl::lib::libstd::mem {
                     continue;
                 }
 
-                return u128(offset);
+                return u64(offset);
             }
         }
 
@@ -44,14 +44,14 @@ namespace pl::lib::libstd::mem {
             runtime.addFunction(nsStdMem, "base_address", FunctionParameterCount::none(), [](Evaluator *ctx, auto params) -> std::optional<Token::Literal> {
                 wolv::util::unused(params);
 
-                return u128(ctx->getDataBaseAddress());
+                return u64(ctx->getDataBaseAddress());
             });
 
             /* size() */
             runtime.addFunction(nsStdMem, "size", FunctionParameterCount::none(), [](Evaluator *ctx, auto params) -> std::optional<Token::Literal> {
                 wolv::util::unused(params);
 
-                return u128(ctx->getDataSize());
+                return u64(ctx->getDataSize());
             });
 
             /* find_sequence_in_range(occurrence_index, start_offset, end_offset, bytes...) */
@@ -92,7 +92,7 @@ namespace pl::lib::libstd::mem {
                 if (size < 1 || size > 16)
                     err::E0012.throwError(fmt::format("Read size {} is out of range.", size), "Try a value between 1 and 16.");
 
-                u128 result = 0;
+                u64 result = 0;
                 ctx->readData(address, &result, size, ptrn::Pattern::MainSectionId);
                 result = hlp::changeEndianess(result, size, endian);
 
@@ -131,7 +131,7 @@ namespace pl::lib::libstd::mem {
             /* current_bit_offset() */
             runtime.addFunction(nsStdMem, "current_bit_offset", FunctionParameterCount::none(), [](Evaluator *ctx, auto params) -> std::optional<Token::Literal> {
                 wolv::util::unused(params);
-                return u128(ctx->getBitwiseReadOffset().bitOffset);
+                return u64(ctx->getBitwiseReadOffset().bitOffset);
             });
 
             /* read_bits(byteOffset, bitOffset, bitSize) */
@@ -147,7 +147,7 @@ namespace pl::lib::libstd::mem {
             runtime.addFunction(nsStdMem, "create_section", FunctionParameterCount::exactly(1), [](Evaluator *ctx, auto params) -> std::optional<Token::Literal> {
                 auto name = params[0].toString(false);
 
-                return u128(ctx->createSection(name));
+                return u64(ctx->createSection(name));
             });
 
             /* delete_section(id) */
@@ -163,7 +163,7 @@ namespace pl::lib::libstd::mem {
             runtime.addFunction(nsStdMem, "get_section_size", FunctionParameterCount::exactly(1), [](Evaluator *ctx, auto params) -> std::optional<Token::Literal> {
                 auto id = params[0].toUnsigned();
 
-                return u128(ctx->getSection(id).size());
+                return u64(ctx->getSection(id).size());
             });
 
             /* set_section_size(id, size) */

@@ -106,7 +106,7 @@ namespace pl::ptrn {
         virtual std::unique_ptr<Pattern> clone() const = 0;
 
         [[nodiscard]] u64 getOffset() const { return this->m_offset; }
-        [[nodiscard]] virtual u128 getOffsetForSorting() const { return this->getOffset() << 3; }
+        [[nodiscard]] virtual u64 getOffsetForSorting() const { return this->getOffset() << 3; }
         [[nodiscard]] u32 getHeapAddress() const { return this->getOffset() >> 32; }
         void setAbsoluteOffset(u64 offset) {
             if (this->m_offset != offset) {
@@ -122,7 +122,7 @@ namespace pl::ptrn {
         }
 
         [[nodiscard]] size_t getSize() const { return this->m_size; }
-        [[nodiscard]] virtual u128 getSizeForSorting() const { return this->getSize() << 3; }
+        [[nodiscard]] virtual u64 getSizeForSorting() const { return this->getSize() << 3; }
         void setSize(size_t size) { this->m_size = size; }
 
         [[nodiscard]] std::string getVariableName() const {

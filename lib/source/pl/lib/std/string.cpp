@@ -23,7 +23,7 @@ namespace pl::lib::libstd::string {
             runtime.addFunction(nsStdString, "length", FunctionParameterCount::exactly(1), [](Evaluator *, auto params) -> std::optional<Token::Literal> {
                 auto string = params[0].toString(false);
 
-                return u128(string.length());
+                return u64(string.length());
             });
 
             /* at(string, index) */

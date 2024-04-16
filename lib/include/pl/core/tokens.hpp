@@ -149,7 +149,7 @@ namespace pl::core::tkn {
         const auto Unsigned48Bit    = makeValueType(Token::ValueType::Unsigned48Bit, "u48");
         const auto Unsigned64Bit    = makeValueType(Token::ValueType::Unsigned64Bit, "u64");
         const auto Unsigned96Bit    = makeValueType(Token::ValueType::Unsigned96Bit, "u96");
-        const auto Unsigned128Bit   = makeValueType(Token::ValueType::Unsigned128Bit, "u128");
+        const auto Unsigned128Bit   = makeValueType(Token::ValueType::Unsigned128Bit, "u64");
 
         const auto Signed8Bit       = makeValueType(Token::ValueType::Signed8Bit, "s8");
         const auto Signed16Bit      = makeValueType(Token::ValueType::Signed16Bit, "s16");

@@ -26,10 +26,10 @@ namespace pl::core::ast {
         if (this->m_providerOperation) {
             switch (this->getOperator()) {
                 case Token::Operator::AddressOf:
-                    result = u128(evaluator->getDataBaseAddress());
+                    result = u64(evaluator->getDataBaseAddress());
                     break;
                 case Token::Operator::SizeOf:
-                    result = u128(evaluator->getDataSize());
+                    result = u64(evaluator->getDataSize());
                     break;
                 default:
                     err::E0001.throwError("Invalid type operation.", {}, this->getLocation());
@@ -50,10 +50,10 @@ namespace pl::core::ast {
 
             switch (this->getOperator()) {
                 case Token::Operator::AddressOf:
-                    result = u128(pattern->getOffset());
+                    result = u64(pattern->getOffset());
                     break;
                 case Token::Operator::SizeOf:
-                    result = u128(pattern->getSize());
+                    result = u64(pattern->getSize());
                     break;
                 case Token::Operator::TypeNameOf: {
                     if (auto typeDecl = dynamic_cast<ASTNodeTypeDecl*>(this->m_expression.get()); typeDecl != nullptr) {

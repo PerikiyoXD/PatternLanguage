@@ -278,7 +278,7 @@ namespace pl::core {
             } else if (op == Token::Operator::SizeOf && sequence(tkn::ValueType::Any)) {
                 const auto type = getValue<Token::ValueType>(-1);
 
-                result = create<ast::ASTNodeLiteral>(u128(Token::getTypeSize(type)));
+                result = create<ast::ASTNodeLiteral>(u64(Token::getTypeSize(type)));
             } else if (op == Token::Operator::TypeNameOf && sequence(tkn::ValueType::Any)) {
                 const auto type = getValue<Token::ValueType>(-1);
 
@@ -1267,7 +1267,7 @@ namespace pl::core {
         return type;
     }
 
-    // [be|le] <Identifier|u8|u16|u24|u32|u48|u64|u96|u128|s8|s16|s24|s32|s48|s64|s96|s128|float|double|str>
+    // [be|le] <Identifier|u8|u16|u24|u32|u48|u64|u96|u64|s8|s16|s24|s32|s48|s64|s96|s128|float|double|str>
     hlp::safe_unique_ptr<ast::ASTNodeTypeDecl> Parser::parseType() {
         const bool reference = sequence(tkn::Keyword::Reference);
 
@@ -1496,7 +1496,7 @@ namespace pl::core {
         }
         if (sequence(tkn::Operator::Assign)) {
             std::vector<hlp::safe_unique_ptr<ast::ASTNode>> compounds;
-            compounds.push_back(create<ast::ASTNodeVariableDecl>(identifier, type, nullptr, create<ast::ASTNodeLiteral>(u128(ptrn::Pattern::PatternLocalSectionId)), false, false, constant));
+            compounds.push_back(create<ast::ASTNodeVariableDecl>(identifier, type, nullptr, create<ast::ASTNodeLiteral>(u64(ptrn::Pattern::PatternLocalSectionId)), false, false, constant));
             auto expression = parseMathematicalExpression();
             if (expression == nullptr)
                 return nullptr;
@@ -1861,9 +1861,9 @@ namespace pl::core {
                 if (identifier != nullptr)
                     identifier->setType(Token::Identifier::IdentifierType::PatternVariable);
                 if (enumNode->getEntries().empty())
-                    enumValue = create<ast::ASTNodeLiteral>(u128(0));
+                    enumValue = create<ast::ASTNodeLiteral>(u64(0));
                 else
-                    enumValue = create<ast::ASTNodeMathematicalExpression>(lastEntry->clone(), create<ast::ASTNodeLiteral>(u128(1)), Token::Operator::Plus);
+                    enumValue = create<ast::ASTNodeMathematicalExpression>(lastEntry->clone(), create<ast::ASTNodeLiteral>(u64(1)), Token::Operator::Plus);
 
                 lastEntry = enumValue->clone();
             } else {

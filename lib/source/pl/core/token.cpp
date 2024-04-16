@@ -17,11 +17,11 @@ namespace pl::core {
                           }, *this);
     }
 
-    u128 Token::Literal::toUnsigned() const {
+    u64 Token::Literal::toUnsigned() const {
         return std::visit(wolv::util::overloaded {
-                              [&](const std::shared_ptr<ptrn::Pattern>&) -> u128 { err::E0004.throwError("Cannot cast value to type 'integer'."); },
-                              [&](const std::string &) -> u128 { err::E0004.throwError("Cannot cast value to type 'integer'."); },
-                              [](auto &&result) -> u128 { return result; }
+                              [&](const std::shared_ptr<ptrn::Pattern>&) -> u64 { err::E0004.throwError("Cannot cast value to type 'integer'."); },
+                              [&](const std::string &) -> u64 { err::E0004.throwError("Cannot cast value to type 'integer'."); },
+                              [](auto &&result) -> u64 { return result; }
                           }, *this);
     }
 
@@ -63,7 +63,7 @@ namespace pl::core {
 
         return std::visit(wolv::util::overloaded {
                               [](const std::string &result) -> std::string { return result; },
-                              [](const u128 &result) -> std::string { return hlp::to_string(result); },
+                              [](const u64 &result) -> std::string { return hlp::to_string(result); },
                               [](const i128 &result) -> std::string { return hlp::to_string(result); },
                               [](const bool &result) -> std::string { return result ? "true" : "false"; },
                               [](const char &result) -> std::string { return { result }; },
@@ -83,7 +83,7 @@ namespace pl::core {
     }
 
     bool Token::Literal::isUnsigned() const {
-        return std::holds_alternative<u128>(*this);
+        return std::holds_alternative<u64>(*this);
     }
 
     bool Token::Literal::isSigned() const {
@@ -148,7 +148,7 @@ namespace pl::core {
         return std::visit(wolv::util::overloaded {
                 [](char) { return Token::ValueType::Character; },
                 [](bool) { return Token::ValueType::Boolean; },
-                [](u128) { return Token::ValueType::Unsigned128Bit; },
+                [](u64) { return Token::ValueType::Unsigned128Bit; },
                 [](i128) { return Token::ValueType::Signed128Bit; },
                 [](double) { return Token::ValueType::Double; },
                 [](const std::string &) { return Token::ValueType::String; },
@@ -209,7 +209,7 @@ namespace pl::core {
             case ValueType::Unsigned96Bit:
                 return "u96";
             case ValueType::Unsigned128Bit:
-                return "u128";
+                return "u64";
             case ValueType::Float:
                 return "float";
             case ValueType::Double:

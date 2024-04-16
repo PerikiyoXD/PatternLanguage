@@ -39,9 +39,9 @@ namespace pl::core::ast {
             },
             [&, this](const std::string &value) -> ASTNode * {
                 if (Token::isUnsigned(type)) {
-                    if (value.size() > sizeof(u128))
+                    if (value.size() > sizeof(u64))
                         err::E0004.throwError(fmt::format("Cannot cast value of type 'str' of size {} to type '{}' of size {}.", value.size(), Token::getTypeName(type), Token::getTypeSize(type)), {}, this->getLocation());
-                    u128 result = 0;
+                    u64 result = 0;
                     std::memcpy(&result, value.data(), value.size());
 
                     auto endianAdjustedValue = changeEndianess(evaluator, result & hlp::bitmask(Token::getTypeSize(type) * 8), value.size(), typePattern->getEndian());
@@ -52,15 +52,15 @@ namespace pl::core::ast {
             [&, this](auto &&value) -> ASTNode * {
                 switch (type) {
                     case Token::ValueType::Unsigned8Bit:
-                        return new ASTNodeLiteral(doIntegerCast<u128, u8>(evaluator, value, typePattern));
+                        return new ASTNodeLiteral(doIntegerCast<u64, u8>(evaluator, value, typePattern));
                     case Token::ValueType::Unsigned16Bit:
-                        return new ASTNodeLiteral(doIntegerCast<u128, u16>(evaluator, value, typePattern));
+                        return new ASTNodeLiteral(doIntegerCast<u64, u16>(evaluator, value, typePattern));
                     case Token::ValueType::Unsigned32Bit:
-                        return new ASTNodeLiteral(doIntegerCast<u128, u32>(evaluator, value, typePattern));
+                        return new ASTNodeLiteral(doIntegerCast<u64, u32>(evaluator, value, typePattern));
                     case Token::ValueType::Unsigned64Bit:
-                        return new ASTNodeLiteral(doIntegerCast<u128, u64>(evaluator, value, typePattern));
+                        return new ASTNodeLiteral(doIntegerCast<u64, u64>(evaluator, value, typePattern));
                     case Token::ValueType::Unsigned128Bit:
-                        return new ASTNodeLiteral(doIntegerCast<u128, u128>(evaluator, value, typePattern));
+                        return new ASTNodeLiteral(doIntegerCast<u64, u64>(evaluator, value, typePattern));
                     case Token::ValueType::Signed8Bit:
                         return new ASTNodeLiteral(doIntegerCast<i128, i8>(evaluator, value, typePattern));
                     case Token::ValueType::Signed16Bit:
@@ -78,7 +78,7 @@ namespace pl::core::ast {
                     case Token::ValueType::Character:
                         return new ASTNodeLiteral(doIntegerCast<char, char>(evaluator, value, typePattern));
                     case Token::ValueType::Character16:
-                        return new ASTNodeLiteral(doIntegerCast<u128, char16_t>(evaluator, value, typePattern));
+                        return new ASTNodeLiteral(doIntegerCast<u64, char16_t>(evaluator, value, typePattern));
                     case Token::ValueType::Boolean:
                         return new ASTNodeLiteral(doIntegerCast<bool, bool>(evaluator, value, typePattern));
                     case Token::ValueType::String:
@@ -136,7 +136,7 @@ namespace pl::core::ast {
         value = std::visit(wolv::util::overloaded {
                 [&](const std::shared_ptr<ptrn::Pattern> &value) -> Token::Literal {
                     if (Token::isInteger(type) && value->getSize() <= Token::getTypeSize(type)) {
-                        u128 result = 0;
+                        u64 result = 0;
                         evaluator->readData(value->getOffset(), &result, value->getSize(), value->getSection());
 
                         return result;

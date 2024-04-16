@@ -61,19 +61,19 @@ namespace pl::core::ast {
         };
 
         return std::unique_ptr<ASTNode>(std::visit(wolv::util::overloaded {
-            [&](u128 left, const std::shared_ptr<ptrn::Pattern> &right)                 -> ASTNode * { return handlePatternOperations(left, right->getValue().toUnsigned());        },
+            [&](u64 left, const std::shared_ptr<ptrn::Pattern> &right)                 -> ASTNode * { return handlePatternOperations(left, right->getValue().toUnsigned());        },
             [&](i128 left, const std::shared_ptr<ptrn::Pattern> &right)                 -> ASTNode * { return handlePatternOperations(left, right->getValue().toSigned());          },
             [&](double left, const std::shared_ptr<ptrn::Pattern> &right)               -> ASTNode * { return handlePatternOperations(left, right->getValue().toFloatingPoint());   },
             [&](char left, const std::shared_ptr<ptrn::Pattern> &right)                 -> ASTNode * { return handlePatternOperations(left, right->getValue().toSigned());          },
             [&](bool left, const std::shared_ptr<ptrn::Pattern> &right)                 -> ASTNode * { return handlePatternOperations(left, right->getValue().toBoolean());         },
             [&](const std::string &left, const std::shared_ptr<ptrn::Pattern> &right)   -> ASTNode * { return handlePatternOperations(left, right->getValue().toString(true));      },
-            [&](const std::shared_ptr<ptrn::Pattern> &left, u128 right)                 -> ASTNode * { return handlePatternOperations(left->getValue().toUnsigned(), right);        },
+            [&](const std::shared_ptr<ptrn::Pattern> &left, u64 right)                 -> ASTNode * { return handlePatternOperations(left->getValue().toUnsigned(), right);        },
             [&](const std::shared_ptr<ptrn::Pattern> &left, i128 right)                 -> ASTNode * { return handlePatternOperations(left->getValue().toSigned(), right);          },
             [&](const std::shared_ptr<ptrn::Pattern> &left, double right)               -> ASTNode * { return handlePatternOperations(left->getValue().toFloatingPoint(), right);   },
             [&](const std::shared_ptr<ptrn::Pattern> &left, char right)                 -> ASTNode * { return handlePatternOperations(left->getValue().toSigned(), right);          },
             [&](const std::shared_ptr<ptrn::Pattern> &left, bool right)                 -> ASTNode * { return handlePatternOperations(left->getValue().toBoolean(), right);         },
             [&](const std::shared_ptr<ptrn::Pattern> &left, const std::string &right)   -> ASTNode * { return handlePatternOperations(left->getValue().toString(true), right);      },
-            [&](u128, const std::string &)                              -> ASTNode * { throwInvalidOperandError(); },
+            [&](u64, const std::string &)                              -> ASTNode * { throwInvalidOperandError(); },
             [&](i128, const std::string &)                              -> ASTNode * { throwInvalidOperandError(); },
             [&](double, const std::string &)                            -> ASTNode * { throwInvalidOperandError(); },
             [&](bool, const std::string &)                              -> ASTNode * { throwInvalidOperandError(); },
@@ -99,7 +99,7 @@ namespace pl::core::ast {
                            err::E0002.throwError("Cannot repeat string a negative number of times.", { }, this->getLocation());
 
                        std::string result;
-                       for (u128 i = 0; i < static_cast<u128>(right); i++)
+                       for (u64 i = 0; i < static_cast<u64>(right); i++)
                            result += left;
                        return new ASTNodeLiteral(result);
                    }

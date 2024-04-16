@@ -44,7 +44,7 @@ namespace pl::core {
         std::optional<Token::Literal> parseIntegerLiteral(std::string_view literal);
 
         std::optional<double> parseFloatingPoint(std::string_view literal, char suffix);
-        std::optional<u128> parseInteger(std::string_view literal);
+        std::optional<u64> parseInteger(std::string_view literal);
 
         Token makeToken(const Token& token, size_t length = 1);
         static Token makeTokenAt(const Token& token, Location& location, size_t length = 1);

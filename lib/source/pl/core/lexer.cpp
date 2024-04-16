@@ -195,10 +195,10 @@ namespace pl::core {
         return makeTokenAt(Literal::makeString(result), location, result.size() + 2);
     }
 
-    std::optional<u128> Lexer::parseInteger(std::string_view literal) {
+    std::optional<u64> Lexer::parseInteger(std::string_view literal) {
         u8 base = 10;
 
-        u128 value = 0;
+        u64 value = 0;
         if(literal[0] == '0') {
             if(literal.size() == 1) {
                 return 0;
@@ -295,7 +295,7 @@ namespace pl::core {
 
         if(!integer.has_value()) return std::nullopt;
 
-        u128 value = integer.value();
+        u64 value = integer.value();
         if(isUnsigned) {
             return value;
         }

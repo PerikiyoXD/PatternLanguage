@@ -32,7 +32,7 @@ namespace pl::core::ast {
 
         bool prevReversed = evaluator->isReadOrderReversed();
         bool reversedChanged = false;
-        u128 fixedSize = 0;
+        u64 fixedSize = 0;
 
         {
             auto *badAttribute = [&]() {
@@ -67,7 +67,7 @@ namespace pl::core::ast {
                 }
                 err::E0008.throwError("The 'direction' parameter for attribute 'bitfield_order' must not be void.", {}, arguments[0]->getLocation());
             }();
-            u128 size = [&]() {
+            u64 size = [&]() {
                 if (auto *literalNode = dynamic_cast<ASTNodeLiteral *>(sizeNode.get()); literalNode != nullptr) {
                     auto value = literalNode->getValue().toUnsigned();
                     if (value == 0)

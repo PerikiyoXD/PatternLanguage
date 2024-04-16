@@ -58,7 +58,7 @@ namespace pl::lib::libstd::file {
                 fileCounter++;
                 openFiles.emplace(std::pair { fileCounter, std::move(file) });
 
-                return u128(fileCounter);
+                return u64(fileCounter);
             });
 
             /* close(file) */
@@ -133,7 +133,7 @@ namespace pl::lib::libstd::file {
                 if (!openFiles.contains(file))
                     throwInvalidFileError();
 
-                return u128(openFiles[file].getSize());
+                return u64(openFiles[file].getSize());
             });
 
             /* resize(file, size) */

@@ -54,7 +54,7 @@ namespace pl::core::ast {
 
         if (this->getPath().size() == 1) {
             if (auto name = std::get_if<std::string>(&this->getPath().front()); name != nullptr) {
-                if (*name == "$") return std::make_unique<ASTNodeLiteral>(u128(evaluator->getReadOffset()));
+                if (*name == "$") return std::make_unique<ASTNodeLiteral>(u64(evaluator->getReadOffset()));
                 else if (*name == "null") return std::make_unique<ASTNodeLiteral>(
                     std::make_shared<ptrn::PatternPadding>(evaluator, 0, 0, getLocation().line));
 
@@ -73,7 +73,7 @@ namespace pl::core::ast {
 
                             u8 byte = 0x00;
                             evaluator->readData(offset, &byte, 1, ptrn::Pattern::MainSectionId);
-                            return std::make_unique<ASTNodeLiteral>(u128(byte));
+                            return std::make_unique<ASTNodeLiteral>(u64(byte));
                         }
                     }
                 }
@@ -89,7 +89,7 @@ namespace pl::core::ast {
 
         Token::Literal literal;
         if (dynamic_cast<ptrn::PatternUnsigned *>(pattern.get()) != nullptr) {
-            u128 value = 0;
+            u64 value = 0;
             readVariable(evaluator, value, pattern.get());
             literal = value;
         } else if (dynamic_cast<ptrn::PatternSigned *>(pattern.get()) != nullptr) {

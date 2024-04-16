@@ -241,8 +241,8 @@ namespace pl::core {
             setBitwiseReadOffset(offset.byteOffset, offset.bitOffset);
         }
 
-        [[nodiscard]] u128 readBits(u128 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness);
-        void writeBits(u128 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness, u128 value);
+        [[nodiscard]] u64 readBits(u64 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness);
+        void writeBits(u64 byteOffset, u8 bitOffset, u64 bitSize, u64 section, std::endian endianness, u64 value);
 
         bool addBuiltinFunction(const std::string &name, api::FunctionParameterCount numParams, std::vector<Token::Literal> defaultParameters, const api::FunctionCallback &function, bool dangerous);
         bool addCustomFunction(const std::string &name, api::FunctionParameterCount numParams, std::vector<Token::Literal> defaultParameters, const api::FunctionCallback &function);

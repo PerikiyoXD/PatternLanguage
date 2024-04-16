@@ -22,7 +22,7 @@
 
 namespace pl::hlp {
 
-    [[nodiscard]] std::string to_string(u128 value);
+    [[nodiscard]] std::string to_string(u64 value);
     [[nodiscard]] std::string to_string(i128 value);
 
     [[nodiscard]] std::vector<u8> toMinimalBytes(const auto &value) {
@@ -32,7 +32,7 @@ namespace pl::hlp {
         while (bytes.size() > 1 && bytes.back() == 0)
             bytes.pop_back();
 
-        if (bytes.size() < sizeof(u128)) {
+        if (bytes.size() < sizeof(u64)) {
             u32 newSize;
             for (newSize = 1; newSize < bytes.size(); newSize <<= 1);
 
@@ -51,7 +51,7 @@ namespace pl::hlp {
     std::string encodeByteString(const std::vector<u8> &bytes);
 
     [[nodiscard]] constexpr inline i128 signExtend(size_t numBits, i128 value) {
-        i128 mask = u128(1) << u128(numBits - 1);
+        i128 mask = u64(1) << u64(numBits - 1);
         return (value ^ mask) - mask;
     }
 
@@ -67,13 +67,13 @@ namespace pl::hlp {
     template<>
     struct SizeTypeImpl<8> { using Type = u64; };
     template<>
-    struct SizeTypeImpl<16> { using Type = u128; };
+    struct SizeTypeImpl<16> { using Type = u64; };
 
     template<size_t Size>
     using SizeType = typename SizeTypeImpl<Size>::Type;
 
-    [[nodiscard]] constexpr u128 bitmask(u8 bits) {
-        return u128(-1) >> (128 - bits);
+    [[nodiscard]] constexpr u64 bitmask(u8 bits) {
+        return u64(-1) >> (128 - bits);
     }
 
     template<typename T>

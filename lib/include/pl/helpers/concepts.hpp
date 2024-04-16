@@ -41,7 +41,7 @@ namespace pl {
     struct is_integral_helper<i64> : public std::true_type { };
 
     template<>
-    struct is_integral_helper<u128> : public std::true_type { };
+    struct is_integral_helper<u64> : public std::true_type { };
 
     template<>
     struct is_integral_helper<i128> : public std::true_type { };

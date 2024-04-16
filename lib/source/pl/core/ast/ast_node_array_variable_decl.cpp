@@ -298,9 +298,9 @@ namespace pl::core::ast {
 
             if (auto literal = dynamic_cast<ASTNodeLiteral *>(sizeNode.get()); literal != nullptr) {
                 auto entryCount = std::visit(wolv::util::overloaded {
-                        [this](const std::string &) -> u128 { err::E0006.throwError("Cannot use string to index array.", "Try using an integral type instead.", this->getLocation()); },
-                        [this](const std::shared_ptr<ptrn::Pattern> &pattern) -> u128 {err::E0006.throwError(fmt::format("Cannot use custom type '{}' to index array.", pattern->getTypeName()), "Try using an integral type instead.", this->getLocation()); },
-                        [](auto &&size) -> u128 { return size; }
+                        [this](const std::string &) -> u64 { err::E0006.throwError("Cannot use string to index array.", "Try using an integral type instead.", this->getLocation()); },
+                        [this](const std::shared_ptr<ptrn::Pattern> &pattern) -> u64 {err::E0006.throwError(fmt::format("Cannot use custom type '{}' to index array.", pattern->getTypeName()), "Try using an integral type instead.", this->getLocation()); },
+                        [](auto &&size) -> u64 { return size; }
                 }, literal->getValue());
 
                 auto limit = evaluator->getArrayLimit();

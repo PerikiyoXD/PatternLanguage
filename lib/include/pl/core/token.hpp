@@ -222,11 +222,11 @@ namespace pl::core {
         };
 
 
-        struct Literal : std::variant<char, bool, u128, i128, double, std::string, std::shared_ptr<ptrn::Pattern>> {
+        struct Literal : std::variant<char, bool, u64, i128, double, std::string, std::shared_ptr<ptrn::Pattern>> {
             using variant::variant;
 
             [[nodiscard]] std::shared_ptr<ptrn::Pattern> toPattern() const;
-            [[nodiscard]] u128 toUnsigned() const;
+            [[nodiscard]] u64 toUnsigned() const;
             [[nodiscard]] i128 toSigned() const;
             [[nodiscard]] double toFloatingPoint() const;
             [[nodiscard]] char toCharacter() const;

@@ -5,7 +5,7 @@
 namespace pl::lib::libstd::types {
 
     struct Endian {
-        Endian(u128 value) {
+        Endian(u64 value) {
             switch (value) {
                 case 0: this->m_endian = std::endian::native;   break;
                 case 1: this->m_endian = std::endian::big;      break;
